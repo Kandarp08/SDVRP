@@ -16,8 +16,8 @@ public:
     Node NumRoutes();
     void SetNumRoutes(Node num_routes);
     void AddRoute(Node head, Node tail, int load);
-    void CalcRouteContext(const Solution &solution);
-    void UpdateRouteContext(const Solution &solution, Node route_index, Node predecessor);
+    void CalcRouteContext(const SpecificSolution &solution);
+    void UpdateRouteContext(const SpecificSolution &solution, Node route_index, Node predecessor);
     void MoveRouteContext(Node dest_route_index, Node src_route_index);
 
 private:

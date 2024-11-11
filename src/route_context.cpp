@@ -45,7 +45,7 @@ void RouteContext::AddRoute(Node head, Node tail, int load)
     routes_.emplace_back(RouteData{head, tail, load});
 }
 
-void RouteContext::CalcRouteContext(const Solution& solution)
+void RouteContext::CalcRouteContext(const SpecificSolution& solution)
 {
     routes_.clear();
 
@@ -61,7 +61,7 @@ void RouteContext::CalcRouteContext(const Solution& solution)
         UpdateRouteContext(solution, route_index, 0);
 }
 
-void RouteContext::UpdateRouteContext(const Solution& solution, Node route_index, Node predecessor)
+void RouteContext::UpdateRouteContext(const SpecificSolution& solution, Node route_index, Node predecessor)
 {
     pre_loads_.resize(solution.MaxNodeIndex() + 1);
     int load = pre_loads_[predecessor];
