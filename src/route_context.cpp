@@ -1,21 +1,21 @@
 #include "../include/route_context.h"
 
-Node RouteContext::Head(Node route_index)
+Node RouteContext::Head(Node route_index) const
 {
     return routes_[route_index].head;
 }
 
-Node RouteContext::Tail(Node route_index)
+Node RouteContext::Tail(Node route_index) const
 {
     return routes_[route_index].tail;    
 }
 
-int RouteContext::Load(Node route_index)
+int RouteContext::Load(Node route_index) const
 {
     return routes_[route_index].load;
 }
 
-int RouteContext::PreLoad(Node route_index)
+int RouteContext::PreLoad(Node route_index) const
 {
     return pre_loads_[route_index];
 }
@@ -30,12 +30,12 @@ void RouteContext::AddLoad(Node route_index, int load)
     routes_[route_index].load += load;
 }
 
-Node RouteContext::NumRoutes()
+Node RouteContext::NumRoutes() const
 {
     return routes_.size();
 }
 
-void RouteContext::SetNumRoutes(Node num_routes)
+void RouteContext::SetNumRoutes(Node num_routes) 
 {
     routes_.resize(num_routes);
 }

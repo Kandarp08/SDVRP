@@ -24,11 +24,10 @@ int AddRoute(CandidateList &candidateList, SpecificSolution &solution,
     return position;
 }
 
-
 void SequentialInsertion(const Problem& problem, const int (*func)(Node, Node, Node), 
                          CandidateList& candidateList, SpecificSolution& solution, RouteContext& context)
 {
-
+    
 }
 
 void ParallelInsertion(const Problem& problem, const int (*func)(Node, Node, Node),

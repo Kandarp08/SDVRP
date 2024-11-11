@@ -7,13 +7,13 @@ class RouteContext
 {
 public:
 
-    Node Head(Node route_index);
-    Node Tail(Node route_index);
-    int Load(Node route_index);
-    int PreLoad(Node node_index);
+    Node Head(Node route_index) const;
+    Node Tail(Node route_index) const;
+    int Load(Node route_index) const;
+    int PreLoad(Node node_index) const;
     void SetHead(Node route_index, Node head);
     void AddLoad(Node route_index, int load);
-    Node NumRoutes();
+    Node NumRoutes() const;
     void SetNumRoutes(Node num_routes);
     void AddRoute(Node head, Node tail, int load);
     void CalcRouteContext(const SpecificSolution &solution);
