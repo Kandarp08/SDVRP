@@ -18,7 +18,7 @@ void ParallelInsertion(const Problem& problem, const int (*func)(Node, Node, Nod
 
 }
 
-Solution Construct(const Problem& problem)
+SpecificSolution Construct(const Problem& problem)
 {
     CandidateList candidateList;
 }
