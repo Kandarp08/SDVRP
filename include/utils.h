@@ -26,7 +26,7 @@ template <typename T> struct InsertionWithCost
     }
 };
 
-auto CalcBestInsertion(const SpecificSolution &solution, const int (*func)(Node, Node, Node),
+template <class T> auto CalcBestInsertion(const SpecificSolution &solution, const T &func,
                         const RouteContext &context, Node route_index, Node customer) 
 {
     Node head = context.Head(route_index);
