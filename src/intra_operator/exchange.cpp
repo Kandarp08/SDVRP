@@ -42,7 +42,7 @@ void ExchangeInner(const Problem &problem, const SpecificSolution &solution, Nod
   }
 }
 
-bool intra_operator::Exchange::operator()(const Problem &problem, Node route_index,
+bool Exchange::operator()(const Problem &problem, Node route_index,
                                           SpecificSolution &solution, RouteContext &context) const {
   ExchangeMove best_move{};
   Delta<int> best_delta{};
@@ -52,7 +52,7 @@ bool intra_operator::Exchange::operator()(const Problem &problem, Node route_ind
     if (node_b) {
       node_b = solution.Successor(node_b);
       while (node_b) {
-        ExchangeInner(problem, solution, node_a, node_b, best_move, best_delta, random);
+        ExchangeInner(problem, solution, node_a, node_b, best_move, best_delta);
         node_b = solution.Successor(node_b);
       }
     }
