@@ -1,3 +1,6 @@
+#ifndef INTRA_OPERATOR_H
+#define INTRA_OPERATOR_H
+
 #include "problem.h"
 #include "solution.h"
 #include "route_context.h"//
@@ -20,3 +23,5 @@ public:
   bool operator()(const Problem &problem, Node route_index, SpecificSolution &solution,
                   RouteContext &context) const override;
 };
+
+#endif

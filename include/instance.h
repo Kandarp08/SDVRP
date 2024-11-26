@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INSTANCE_H
+#define INSTANCE_H
 
 #include <vector>
 
@@ -12,3 +13,5 @@ struct Instance
     std::vector<std::vector<int>>
         distance_matrix; /**< The distance matrix between customers, including the depot. */
 };
+
+#endif

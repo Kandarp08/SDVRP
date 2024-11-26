@@ -1,3 +1,6 @@
+#ifndef ROUTE_CONTEXT_H
+#define ROUTE_CONTEXT_H
+
 #include "problem.h"
 #include "solution.h"
 
@@ -32,3 +35,5 @@ private:
     std::vector<RouteData> routes_;
     std::vector<int> pre_loads_;
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef INTER_OPERATOR_H
+#define INTER_OPERATOR_H
+
 #include "problem.h"
 #include "solution.h"
 #include "route_context.h"
@@ -103,3 +106,5 @@
     std::vector<Node> operator()(const Problem &problem, SpecificSolution &solution, RouteContext &context,
                                 CacheMap &cache_map) const;
   };
+
+#endif
