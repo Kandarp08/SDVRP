@@ -1,6 +1,4 @@
-#pragma once
-
-#include <instance.h>
+#include "instance.h"
 
 #include <memory>
 #include <vector>
@@ -12,8 +10,7 @@ class SortOperator
 public:
     virtual ~SortOperator() = default;
 
-    virtual void operator()(const Instance &instance, std::vector<Node> &customers,
-                            Random &random) const = 0;
+    virtual void operator()(const Instance &instance, std::vector<Node> &customers) const = 0;
 };
 
 class Sorter
@@ -21,7 +18,7 @@ class Sorter
 public:
     void AddSortFunction(std::unique_ptr<SortOperator> &&sort_function, double weight);
 
-    void Sort(const Instance &instance, std::vector<Node> &customers, Random &random) const;
+    void Sort(const Instance &instance, std::vector<Node> &customers) const;
 
 private:
     double sum_weights_ = 0;
@@ -31,27 +28,23 @@ private:
 class SortByRandom : public SortOperator
 {
 public:
-    void operator()(const Instance &instance, std::vector<Node> &customers,
-                    Random &random) const override;
+    void operator()(const Instance &instance, std::vector<Node> &customers) const override;
 };
 
 class SortByDemand : public SortOperator
 {
 public:
-    void operator()(const Instance &instance, std::vector<Node> &customers,
-                    Random &random) const override;
+    void operator()(const Instance &instance, std::vector<Node> &customers) const override;
 };
 
 class SortByFar : public SortOperator
 {
 public:
-    void operator()(const Instance &instance, std::vector<Node> &customers,
-                    Random &random) const override;
+    void operator()(const Instance &instance, std::vector<Node> &customers) const override;
 };
 
 class SortByClose : public SortOperator
 {
 public:
-    void operator()(const Instance &instance, std::vector<Node> &customers,
-                    Random &random) const override;
+    void operator()(const Instance &instance, std::vector<Node> &customers) const override;
 };
