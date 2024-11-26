@@ -24,7 +24,7 @@ int AddRoute(CandidateList &candidateList, SpecificSolution &solution,
     return position;
 }
 
-void SequentialInsertion(const Problem& problem, const float &func, 
+template <class Func> void SequentialInsertion(const Problem& problem, const Func &func, 
                          CandidateList& candidateList, SpecificSolution& solution, RouteContext& context)
 {
     InsertionWithCost<float> best_insertion{};
@@ -83,7 +83,7 @@ void SequentialInsertion(const Problem& problem, const float &func,
     }
 }
 
-void ParallelInsertion(const Problem& problem, const float &func,
+template <class Func> void ParallelInsertion(const Problem& problem, const Func &func,
                        CandidateList& candidateList, SpecificSolution& solution, RouteContext& context)
 {
     vector<vector<InsertionWithCost<float>>> best_insertions(candidateList.size());
