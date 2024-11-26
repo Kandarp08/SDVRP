@@ -1,3 +1,6 @@
+#ifndef ROUTE_HEAD_GUARD
+#define ROUTE_HEAD_GUARD
+
 #include "solution.h"
 #include "route_context.h"
 
@@ -11,3 +14,6 @@ struct RouteHeadGuard {
     }
     ~RouteHeadGuard() { context.SetHead(route_index, solution.Successor(0)); }
   };
+
+
+#endif

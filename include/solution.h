@@ -1,3 +1,6 @@
+#ifndef SOLUTION_H
+#define SOLUTION_H
+
 #include "problem.h"
 #include <ostream>
 #include <vector>
@@ -184,3 +187,6 @@ private:
     vector<Node> used_nodes_;
     vector<Node> unused_nodes_;
 };
+
+
+#endif

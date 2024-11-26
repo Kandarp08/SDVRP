@@ -1,3 +1,6 @@
+#ifndef RUIN_METHOD_H
+#define RUIN_METHOD_H
+
 #include <vector>
 
 #include "problem.h"
@@ -45,3 +48,5 @@ private:
     double split_rate_;
     double preserved_probability_;
 };
+
+#endif

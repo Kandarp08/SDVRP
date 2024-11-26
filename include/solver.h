@@ -1,5 +1,8 @@
-#include <include/problem.h>
-#include <include/solution.h>
+#ifndef SOLVER_H
+#define SOLVER_H
+
+#include "problem.h"
+#include "solution.h"
 
 
 template <typename SolutionType, typename ProblemType> class Solver {
@@ -17,3 +20,5 @@ class SpecificSolver : public Solver<SpecificSolution, Problem> {
 ///  Main function for solving the problem.
 /// problem The problem instance.
 /// return The solution to the problem.
+
+#endif

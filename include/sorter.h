@@ -1,9 +1,10 @@
+#ifndef SORTER_H
+#define SORTER_H
+
 #include "instance.h"
 
 #include <memory>
 #include <vector>
-
-class Random;
 
 class SortOperator
 {
@@ -48,3 +49,5 @@ class SortByClose : public SortOperator
 public:
     void operator()(const Instance &instance, std::vector<Node> &customers) const override;
 };
+
+#endif

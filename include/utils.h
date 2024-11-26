@@ -1,3 +1,7 @@
+#ifndef UTILS_H
+#define UTILS_H
+
+
 #include "problem.h"
 #include "solution.h"
 
@@ -61,3 +65,6 @@ Node CalcFleetLowerBound(const Problem &problem)
 
     return (sum_demands + problem.capacity - 1) / problem.capacity;
 }
+
+
+#endif
