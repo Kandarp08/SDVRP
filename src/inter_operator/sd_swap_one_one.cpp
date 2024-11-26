@@ -28,7 +28,7 @@ void DoSdSwapOneOne(const SdSwapOneOneMove &move, SpecificSolution &solution, Ro
   }
 }
 
-void SdSwapOneOneInner(const Problem &problem, const SpecificSolution &solution,
+void SdSwapOneOneInner(const Instance &instance, const SpecificSolution &solution,
                         [[maybe_unused]] const RouteContext &context, bool swapped, Node route_x,
                         Node route_y, Node node_x, Node node_y, int split_load,
                         BaseCache<SdSwapOneOneMove> &cache) {
@@ -36,10 +36,10 @@ void SdSwapOneOneInner(const Problem &problem, const SpecificSolution &solution,
   Node successor_x = solution.Successor(node_x);
   Node predecessor_y = solution.Predecessor(node_y);
   Node successor_y = solution.Successor(node_y);
-  int delta = -CalcDelta(problem, solution, node_y, predecessor_y, successor_y);
-  int delta_x = CalcDelta(problem, solution, node_x, predecessor_y, successor_y);
-  int before = CalcDelta(problem, solution, node_y, predecessor_x, node_x);
-  int after = CalcDelta(problem, solution, node_y, node_x, successor_x);
+  int delta = -CalcDelta(instance, solution, node_y, predecessor_y, successor_y);
+  int delta_x = CalcDelta(instance, solution, node_x, predecessor_y, successor_y);
+  int before = CalcDelta(instance, solution, node_y, predecessor_x, node_x);
+  int after = CalcDelta(instance, solution, node_y, node_x, successor_x);
   int delta_y;
   Node predecessor;
   Node successor;
@@ -59,7 +59,7 @@ void SdSwapOneOneInner(const Problem &problem, const SpecificSolution &solution,
   }
 }
 
-void SdSwapOneOneInner(const Problem &problem, const SpecificSolution &solution,
+void SdSwapOneOneInner(const Instance &instance, const SpecificSolution &solution,
                         const RouteContext &context, Node route_x, Node route_y,
                         BaseCache<SdSwapOneOneMove> &cache) {
   for (Node node_x = context.Head(route_x); node_x; node_x = solution.Successor(node_x)) {
@@ -67,17 +67,17 @@ void SdSwapOneOneInner(const Problem &problem, const SpecificSolution &solution,
     for (Node node_y = context.Head(route_y); node_y; node_y = solution.Successor(node_y)) {
       int load_y = solution.Load(node_y);
       if (load_x > load_y) {
-        SdSwapOneOneInner(problem, solution, context, false, route_x, route_y, node_x, node_y,
+        SdSwapOneOneInner(instance, solution, context, false, route_x, route_y, node_x, node_y,
                           load_x - load_y, cache);
       } else if (load_y > load_x) {
-        SdSwapOneOneInner(problem, solution, context, true, route_y, route_x, node_y, node_x,
+        SdSwapOneOneInner(instance, solution, context, true, route_y, route_x, node_y, node_x,
                           load_y - load_x, cache);
       }
     }
   }
 }
 
-std::vector<Node> inter_operator::SdSwapOneOne::operator()(const Problem &problem,
+std::vector<Node> SdSwapOneOne::operator()(const Instance &instance,
                                                             SpecificSolution &solution,
                                                             RouteContext &context,
                                                             CacheMap &cache_map) const {
@@ -88,7 +88,7 @@ std::vector<Node> inter_operator::SdSwapOneOne::operator()(const Problem &proble
     for (Node route_y = route_x + 1; route_y < context.NumRoutes(); ++route_y) {
       auto &cache = caches.Get(route_x, route_y);
       if (!cache.TryReuse()) {
-        SdSwapOneOneInner(problem, solution, context, route_x, route_y, cache);
+        SdSwapOneOneInner(instance, solution, context, route_x, route_y, cache);
       } else {
         if (!cache.move.swapped) {
           cache.move.route_x = route_x;

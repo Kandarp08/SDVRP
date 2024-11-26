@@ -33,7 +33,7 @@ public:
         auto it = caches_.find(typeid(T));
         if (it == caches_.end())
         {
-            auto cache = make_u nique<T>();
+            auto cache = make_unique<T>();
             cache->Reset(solution, context);
             auto &cache_ref = *cache;
             caches_.emplace(typeid(T), move(cache));
