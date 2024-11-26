@@ -1,8 +1,8 @@
 #ifndef DISTANCE_MATRIX_OPTIMIZER_H
 #define DISTANCE_MATRIX_OPTIMIZER_H
 
-#include "include/problem.h"
-#include "include/solution.h"
+#include "problem.h"
+#include "solution.h"
 
 #include <vector>
 
