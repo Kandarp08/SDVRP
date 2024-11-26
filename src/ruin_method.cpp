@@ -17,7 +17,10 @@ vector<Node> RandomRuin::Ruin(const Problem &problem, SpecificSolution &solution
     vector<Node> customers(problem.num_customers - 1);
 
     iota(customers.begin(), customers.end(), 1);
-    shuffle(customers.begin(), customers.end(), rand());
+
+    std::random_device rd; // Seed
+    std::mt19937 gen(rd());
+    shuffle(customers.begin(), customers.end(), gen);
     
     customers.erase(customers.begin() + num_perturb, customers.end());
 
@@ -100,7 +103,11 @@ vector<Node> SisrsRuin::Ruin(const Problem &problem, SpecificSolution &solution,
     sort(customer_indices.begin(), customer_indices.end());
     customer_indices.erase(std::unique(customer_indices.begin(), customer_indices.end()),
                            customer_indices.end());
-    shuffle(customer_indices.begin(), customer_indices.end(), rand());
+
+
+    std::random_device rd; // Seed
+    std::mt19937 gen(rd());
+    shuffle(customer_indices.begin(), customer_indices.end(), gen);
     
     return customer_indices;
 }

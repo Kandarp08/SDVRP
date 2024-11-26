@@ -74,9 +74,21 @@ int main()
     config.random_seed = 42;
     config.time_limit = 10;
     config.blink_rate = 0.021;
-    config.inter_operators = {make_unique<Relocate>(), make_unique<Swap<2, 0>>(), make_unique<Swap<2, 1>>(), make_unique<Swap<2, 1>>(), make_unique<Cross>(), make_unique<SwapStar>(), make_unique<SdSwapStar>(), make_unique<SdSwapOneOne>(), make_unique<SdSwapTwoOne>()};
 
-    config.intra_operators = {make_unique<Exchange>(), make_unique<OrOpt<1>>()};
+    config.inter_operators.push_back(make_unique<Relocate>());
+    config.inter_operators.push_back(make_unique<Swap<2, 0>>());
+    config.inter_operators.push_back(make_unique<Swap<2, 1>>());
+    config.inter_operators.push_back(make_unique<Swap<2, 2>>());
+    config.inter_operators.push_back(make_unique<Cross>());
+    config.inter_operators.push_back(make_unique<SwapStar>());
+    config.inter_operators.push_back(make_unique<SdSwapStar>());
+    config.inter_operators.push_back(make_unique<SdSwapOneOne>());
+    config.inter_operators.push_back(make_unique<SdSwapTwoOne>());
+
+    config.intra_operators.push_back(std::make_unique<Exchange>());
+    config.intra_operators.push_back(std::make_unique<OrOpt<1>>());
+    config.intra_operators.push_back(std::make_unique<OrOpt<2>>());
+    config.intra_operators.push_back(std::make_unique<OrOpt<3>>());
 
     auto length = static_cast<int>(83);
     config.acceptance_rule = [length]()
@@ -98,9 +110,9 @@ int main()
     sorter.AddSortFunction(std::make_unique<SortByFar>(), 0.942);
     sorter.AddSortFunction(std::make_unique<SortByClose>(), 0.120);
 
-    config.sorter = sorter;
+    config.sorter = std::move(sorter);
 
-    config.listener = make_unique<SimpleListener>();
+    config.listener = std::move(std::make_unique<SimpleListener>());
 
     auto solution = solver.Solve(config, problem);
     distance_matrix_optimizer.Restore(solution);

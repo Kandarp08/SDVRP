@@ -56,15 +56,6 @@ template <class T> auto CalcBestInsertion(const SpecificSolution &solution, cons
     return best_insertion;
 }
 
-Node CalcFleetLowerBound(const Problem &problem) 
-{
-    int sum_demands = 0;
-
-    for (Node i = 1; i < problem.num_customers; ++i)
-      sum_demands += problem.demands[i];
-
-    return (sum_demands + problem.capacity - 1) / problem.capacity;
-}
 
 
 #endif

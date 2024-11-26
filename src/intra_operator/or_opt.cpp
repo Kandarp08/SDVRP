@@ -1,6 +1,6 @@
-#include "../include/intra_operator.h"
-#include "../include/delta.h"
-#include "../include/route_context.h"
+#include "../../include/intra_operator.h"
+#include "../../include/delta.h"
+#include "../../include/route_context.h"
 
 struct OrOptMove {
   bool reversed;
@@ -55,8 +55,8 @@ template <int num> void OrOptInner(const Problem &problem, const SpecificSolutio
 }
 
 template <int num>
-bool intra_operator::OrOpt<num>::operator()(const Problem &problem, Node route_index,
-                                            SpecificSolution &solution, RouteContext &context)const {
+bool OrOpt<num>::operator()(const Problem &problem, Node route_index,
+                                            SpecificSolution &solution, RouteContext &context) const {
   OrOptMove best_move{};
   Delta<int> best_delta{};
   Node head = context.Head(route_index);

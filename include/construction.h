@@ -6,4 +6,6 @@
 
 SpecificSolution Construct(const Problem& problem);
 
+Node CalcFleetLowerBound(const Problem &problem);
+
 #endif

@@ -7,6 +7,17 @@
 
 using CandidateList = vector<pair<int, int>>;
 
+
+Node CalcFleetLowerBound(const Problem &problem) 
+{
+    int sum_demands = 0;
+
+    for (Node i = 1; i < problem.num_customers; ++i)
+      sum_demands += problem.demands[i];
+
+    return (sum_demands + problem.capacity - 1) / problem.capacity;
+}
+
 int AddRoute(CandidateList &candidateList, SpecificSolution &solution,
                RouteContext &context) 
 {

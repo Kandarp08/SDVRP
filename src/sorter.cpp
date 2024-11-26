@@ -9,7 +9,7 @@ void Sorter::AddSortFunction(std::unique_ptr<SortOperator> &&sort_function, doub
     sort_functions_.emplace_back(std::move(sort_function), weight);
 }
 
-void Sorter::Sort(const Instance &instance, std::vector<Node> &customers) const
+void Sorter::Sort(const Problem &problem, std::vector<Node> &customers) const
 {
     double r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * sum_weights_;
     for (auto &&[sort_function, weight] : sort_functions_)
@@ -17,13 +17,13 @@ void Sorter::Sort(const Instance &instance, std::vector<Node> &customers) const
         r -= weight;
         if (r < 0)
         {
-            (*sort_function)(instance, customers);
+            (*sort_function)(problem, customers);
             return;
         }
     }
 }
 
-void SortByRandom::operator()([[maybe_unused]] const Instance &instance,
+void SortByRandom::operator()([[maybe_unused]] const Problem &problem,
                               std::vector<Node> &customers) const
 {
     std::random_device rd; // Seed
@@ -31,20 +31,20 @@ void SortByRandom::operator()([[maybe_unused]] const Instance &instance,
     shuffle(customers.begin(), customers.end(), gen);
 }
 
-void SortByDemand::operator()(const Instance &instance, std::vector<Node> &customers) const
+void SortByDemand::operator()(const Problem &problem, std::vector<Node> &customers) const
 {
     std::stable_sort(customers.begin(), customers.end(), [&](Node lhs, Node rhs)
-                     { return instance.demands[lhs] > instance.demands[rhs]; });
+                     { return problem.demands[lhs] > problem.demands[rhs]; });
 }
 
-void SortByFar::operator()(const Instance &instance, std::vector<Node> &customers) const
+void SortByFar::operator()(const Problem &problem, std::vector<Node> &customers) const
 {
     std::stable_sort(customers.begin(), customers.end(), [&](Node lhs, Node rhs)
-                     { return instance.distance_matrix[0][lhs] > instance.distance_matrix[0][rhs]; });
+                     { return problem.distance_matrix[0][lhs] > problem.distance_matrix[0][rhs]; });
 }
 
-void SortByClose::operator()(const Instance &instance, std::vector<Node> &customers) const
+void SortByClose::operator()(const Problem &problem, std::vector<Node> &customers) const
 {
     std::stable_sort(customers.begin(), customers.end(), [&](Node lhs, Node rhs)
-                     { return instance.distance_matrix[0][lhs] < instance.distance_matrix[0][rhs]; });
+                     { return problem.distance_matrix[0][lhs] < problem.distance_matrix[0][rhs]; });
 }

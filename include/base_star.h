@@ -31,7 +31,7 @@ template <int num> struct BestInsertion {
         insertions[i] = {{delta, 1}, predecessor, successor};
         return;
       } else if (delta == insertions[i].delta.value && insertions[i].delta.counter != -1) {
-        if (random.NextInt(1, insertions[i].delta.counter + 1) == 1) {
+        if ((rand() % (insertions[i].delta.counter + 1) + 1) == 1) {
           for (int j = num - 1; j > i; --j) {
             insertions[j] = insertions[j - 1];
           }

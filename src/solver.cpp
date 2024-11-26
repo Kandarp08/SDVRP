@@ -22,7 +22,10 @@ void IntraRouteSearch(const Problem &problem, const SpecificConfig &config, Node
     
     while (true) 
     {
-        shuffle(intra_neighborhoods.begin(), intra_neighborhoods.end(), rand());
+        std::random_device rd; // Seed
+        std::mt19937 gen(rd());
+        shuffle(intra_neighborhoods.begin(), intra_neighborhoods.end(), gen);
+        
         bool improved = false;
       
         for (Node neighborhood : intra_neighborhoods) 
@@ -49,7 +52,10 @@ void RandomizedVariableNeighborhoodDescent(const Problem &problem, const Specifi
         vector<int> inter_neighborhoods(config.inter_operators.size());
         iota(inter_neighborhoods.begin(), inter_neighborhoods.end(), 0);
       
-        shuffle(inter_neighborhoods.begin(), inter_neighborhoods.end(), rand());
+        std::random_device rd; // Seed
+        std::mt19937 gen(rd());
+        shuffle(inter_neighborhoods.begin(), inter_neighborhoods.end(), gen);
+        
         bool improved = false;
       
         for (int neighborhood : inter_neighborhoods) 
@@ -91,7 +97,7 @@ void RandomizedVariableNeighborhoodDescent(const Problem &problem, const Specifi
                     context.SetHead(num_routes, head);
                     context.UpdateRouteContext(solution, num_routes, 0);
                     cache_map.AddRoute(num_routes);
-                    IntraRouteSearch(problem, config, num_routes, solution, context, random);
+                    IntraRouteSearch(problem, config, num_routes, solution, context);
                     ++num_routes;
                 }
 
