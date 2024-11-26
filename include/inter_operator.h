@@ -49,7 +49,7 @@
   class Relocate : public InterOperator {
   public:
     std::vector<Node> operator()(const Problem &problem, SpecificSolution &solution, RouteContext &context,
-                                 CacheMap &cache_map) const override;
+                                 CacheMap &cache_map) const;
   };
 
   /**
@@ -59,7 +59,7 @@
   class SwapStar : public InterOperator {
   public:
     std::vector<Node> operator()(const Problem &problem, SpecificSolution &solution, RouteContext &context,
-                                 CacheMap &cache_map) const override;
+                                 CacheMap &cache_map) const;
   };
 
   /**
@@ -69,7 +69,7 @@
   class Cross : public InterOperator {
   public:
     std::vector<Node> operator()(const Problem &problem, SpecificSolution &solution, RouteContext &context,
-                                 CacheMap &cache_map) const override;
+                                 CacheMap &cache_map) const;
   };
 
   /**
@@ -79,7 +79,7 @@
   class SdSwapStar : public InterOperator {
   public:
     std::vector<Node> operator()(const Problem &problem, SpecificSolution &solution, RouteContext &context,
-                                 CacheMap &cache_map) const override;
+                                 CacheMap &cache_map) const;
   };
 
   /**
@@ -90,7 +90,7 @@
   class SdSwapOneOne : public InterOperator {
   public:
     std::vector<Node> operator()(const Problem &problem, SpecificSolution &solution, RouteContext &context,
-                                 CacheMap &cache_map) const override;
+                                 CacheMap &cache_map) const;
   };
 
   /**
@@ -101,5 +101,5 @@
   class SdSwapTwoOne : public InterOperator {
   public:
     std::vector<Node> operator()(const Problem &problem, SpecificSolution &solution, RouteContext &context,
-                                CacheMap &cache_map) const override;
+                                CacheMap &cache_map) const;
   };
