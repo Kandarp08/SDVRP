@@ -29,7 +29,7 @@
     }
   }
 
-  void SdSwapStarInner(const Instance &instance, const SpecificSolution &solution,
+  void SdSwapStarInner(const Problem &problem, const SpecificSolution &solution,
                        [[maybe_unused]] const RouteContext &context, bool swapped, Node route_x,
                        Node route_y, Node node_x, Node node_y, int split_load,
                        BaseCache<SdSwapStarMove> &cache, StarCaches &star_caches) {
@@ -37,8 +37,8 @@
     auto &&insertion_y = star_caches.Get(route_x, solution.Customer(node_y));
     Node predecessor_y = solution.Predecessor(node_y);
     Node successor_y = solution.Successor(node_y);
-    int delta = -CalcDelta(instance, solution, node_y, predecessor_y, successor_y);
-    int delta_x = CalcDelta(instance, solution, node_x, predecessor_y, successor_y);
+    int delta = -CalcDelta(problem, solution, node_y, predecessor_y, successor_y);
+    int delta_x = CalcDelta(problem, solution, node_x, predecessor_y, successor_y);
     auto best_insertion_y = insertion_y.FindBest();
     auto best_insertion_x = insertion_x.FindBestWithoutNode(node_y);
     if (best_insertion_x && best_insertion_x->delta.value < delta_x) {
@@ -61,11 +61,11 @@
     }
   }
 
-  void SdSwapStarInner(const Instance &instance, const SpecificSolution &solution,
+  void SdSwapStarInner(const Problem &problem, const SpecificSolution &solution,
                        const RouteContext &context, Node route_x, Node route_y,
                        BaseCache<SdSwapStarMove> &cache, StarCaches &star_caches) {
-    star_caches.Preprocess(instance, solution, context, route_x);
-    star_caches.Preprocess(instance, solution, context, route_y);
+    star_caches.Preprocess(problem, solution, context, route_x);
+    star_caches.Preprocess(problem, solution, context, route_y);
     Node node_x = context.Head(route_x);
     while (node_x) {
       int load_x = solution.Load(node_x);
@@ -73,10 +73,10 @@
       while (node_y) {
         int load_y = solution.Load(node_y);
         if (load_x > load_y) {
-          SdSwapStarInner(instance, solution, context, false, route_x, route_y, node_x, node_y,
+          SdSwapStarInner(problem, solution, context, false, route_x, route_y, node_x, node_y,
                           load_x - load_y, cache, star_caches);
         } else if (load_y > load_x) {
-          SdSwapStarInner(instance, solution, context, true, route_y, route_x, node_y, node_x,
+          SdSwapStarInner(problem, solution, context, true, route_y, route_x, node_y, node_x,
                           load_y - load_x, cache, star_caches);
         }
         node_y = solution.Successor(node_y);
@@ -85,7 +85,7 @@
     }
   }
 
-  std::vector<Node> SdSwapStar::operator()(const Instance &instance,
+  std::vector<Node> SdSwapStar::operator()(const Problem &problem,
                                                            SpecificSolution &solution,
                                                            RouteContext &context,
                                                            CacheMap &cache_map) const {
@@ -97,7 +97,7 @@
       for (Node route_y = route_x + 1; route_y < context.NumRoutes(); ++route_y) {
         auto &cache = caches.Get(route_x, route_y);
         if (!cache.TryReuse()) {
-          SdSwapStarInner(instance, solution, context, route_x, route_y, cache, star_caches);
+          SdSwapStarInner(problem, solution, context, route_x, route_y, cache, star_caches);
         } else {
           if (!cache.move.swapped) {
             cache.move.route_x = route_x;

@@ -84,24 +84,24 @@
     }
   }
 
-  void SdSwapTwoOne0(const Instance &instance, const SpecificSolution &solution,
+  void SdSwapTwoOne0(const Problem &problem, const SpecificSolution &solution,
                      [[maybe_unused]] const RouteContext &context, Node route_ij, Node route_k,
                      Node node_i, Node node_j, Node node_k, Node predecessor_ij, Node successor_ij,
                      int split_load, int base_delta, BaseCache<SdSwapTwoOneMove> &cache) {
     Node predecessor_k = solution.Predecessor(node_k);
     Node successor_k = solution.Successor(node_k);
     int delta_ij
-        = instance.distance_matrix[solution.Customer(predecessor_k)][solution.Customer(node_i)]
-          + instance.distance_matrix[solution.Customer(node_j)][solution.Customer(successor_k)];
+        = problem.distance_matrix[solution.Customer(predecessor_k)][solution.Customer(node_i)]
+          + problem.distance_matrix[solution.Customer(node_j)][solution.Customer(successor_k)];
     int delta_ji
-        = instance.distance_matrix[solution.Customer(predecessor_k)][solution.Customer(node_j)]
-          + instance.distance_matrix[solution.Customer(node_i)][solution.Customer(successor_k)];
+        = problem.distance_matrix[solution.Customer(predecessor_k)][solution.Customer(node_j)]
+          + problem.distance_matrix[solution.Customer(node_i)][solution.Customer(successor_k)];
     int delta_jk
-        = instance.distance_matrix[solution.Customer(predecessor_ij)][solution.Customer(node_j)]
-          + instance.distance_matrix[solution.Customer(node_k)][solution.Customer(successor_ij)];
+        = problem.distance_matrix[solution.Customer(predecessor_ij)][solution.Customer(node_j)]
+          + problem.distance_matrix[solution.Customer(node_k)][solution.Customer(successor_ij)];
     int delta_kj
-        = instance.distance_matrix[solution.Customer(predecessor_ij)][solution.Customer(node_k)]
-          + instance.distance_matrix[solution.Customer(node_j)][solution.Customer(successor_ij)];
+        = problem.distance_matrix[solution.Customer(predecessor_ij)][solution.Customer(node_k)]
+          + problem.distance_matrix[solution.Customer(node_j)][solution.Customer(successor_ij)];
     bool direction_ij = true;
     if (delta_ij > delta_ji) {
       delta_ij = delta_ji;
@@ -113,7 +113,7 @@
       direction_jk = false;
     }
     int delta = base_delta
-                + instance.distance_matrix[solution.Customer(node_j)][solution.Customer(node_k)]
+                + problem.distance_matrix[solution.Customer(node_j)][solution.Customer(node_k)]
                 + delta_ij + delta_jk;
     if (cache.delta.Update(delta)) {
       cache.move = {0,      route_ij, route_k,    predecessor_ij, successor_ij, node_i,
@@ -121,15 +121,15 @@
     }
   }
 
-  void SdSwapTwoOne1(const Instance &instance, const SpecificSolution &solution,
+  void SdSwapTwoOne1(const Problem &problem, const SpecificSolution &solution,
                      [[maybe_unused]] const RouteContext &context, Node route_ij, Node route_k,
                      Node node_i, Node node_j, Node node_k, Node predecessor_ij, Node successor_ij,
                      int split_load, int base_delta, BaseCache<SdSwapTwoOneMove> &cache) {
     Node predecessor_k = solution.Predecessor(node_k);
     Node successor_k = solution.Successor(node_k);
     base_delta
-        += instance.distance_matrix[solution.Customer(predecessor_ij)][solution.Customer(node_k)]
-           + instance.distance_matrix[solution.Customer(node_k)][solution.Customer(successor_ij)];
+        += problem.distance_matrix[solution.Customer(predecessor_ij)][solution.Customer(node_k)]
+           + problem.distance_matrix[solution.Customer(node_k)][solution.Customer(successor_ij)];
     for (bool direction_ij : {true, false}) {
       int before_ij = node_i;
       int after_ij = node_j;
@@ -140,16 +140,16 @@
         int delta_ijk;
         if (direction_ijk) {
           delta_ijk
-              = instance
+              = problem
                     .distance_matrix[solution.Customer(predecessor_k)][solution.Customer(before_ij)]
-                + instance.distance_matrix[solution.Customer(after_ij)][solution.Customer(node_k)]
-                + instance
+                + problem.distance_matrix[solution.Customer(after_ij)][solution.Customer(node_k)]
+                + problem
                       .distance_matrix[solution.Customer(node_k)][solution.Customer(successor_k)];
         } else {
           delta_ijk
-              = instance.distance_matrix[solution.Customer(predecessor_k)][solution.Customer(node_k)]
-                + instance.distance_matrix[solution.Customer(node_k)][solution.Customer(before_ij)]
-                + instance
+              = problem.distance_matrix[solution.Customer(predecessor_k)][solution.Customer(node_k)]
+                + problem.distance_matrix[solution.Customer(node_k)][solution.Customer(before_ij)]
+                + problem
                       .distance_matrix[solution.Customer(after_ij)][solution.Customer(successor_k)];
         }
         int delta = base_delta + delta_ijk;
@@ -161,7 +161,7 @@
     }
   }
 
-  void SdSwapTwoOneInner(const Instance &instance, const SpecificSolution &solution,
+  void SdSwapTwoOneInner(const Problem &problem, const SpecificSolution &solution,
                          const RouteContext &context, Node route_ij, Node route_k,
                          BaseCache<SdSwapTwoOneMove> &cache) {
     Node node_i = context.Head(route_ij);
@@ -174,23 +174,23 @@
         Node predecessor_ij = solution.Predecessor(node_i);
         Node successor_ij = solution.Successor(node_j);
         int base_delta
-            = -instance.distance_matrix[solution.Customer(predecessor_ij)][solution.Customer(node_i)]
-              - instance.distance_matrix[solution.Customer(node_j)][solution.Customer(successor_ij)]
-              - instance.distance_matrix[solution.Customer(solution.Predecessor(node_k))]
+            = -problem.distance_matrix[solution.Customer(predecessor_ij)][solution.Customer(node_i)]
+              - problem.distance_matrix[solution.Customer(node_j)][solution.Customer(successor_ij)]
+              - problem.distance_matrix[solution.Customer(solution.Predecessor(node_k))]
                                        [solution.Customer(node_k)]
-              - instance.distance_matrix[solution.Customer(node_k)]
+              - problem.distance_matrix[solution.Customer(node_k)]
                                        [solution.Customer(solution.Successor(node_k))];
         if (load_i + load_j > load_k) {
           if (load_i < load_k) {
-            SdSwapTwoOne0(instance, solution, context, route_ij, route_k, node_i, node_j, node_k,
+            SdSwapTwoOne0(problem, solution, context, route_ij, route_k, node_i, node_j, node_k,
                           predecessor_ij, successor_ij, load_i + load_j - load_k, base_delta, cache);
           }
           if (load_j < load_k) {
-            SdSwapTwoOne0(instance, solution, context, route_ij, route_k, node_j, node_i, node_k,
+            SdSwapTwoOne0(problem, solution, context, route_ij, route_k, node_j, node_i, node_k,
                           predecessor_ij, successor_ij, load_i + load_j - load_k, base_delta, cache);
           }
         } else if (load_k > load_i + load_j) {
-          SdSwapTwoOne1(instance, solution, context, route_ij, route_k, node_i, node_j, node_k,
+          SdSwapTwoOne1(problem, solution, context, route_ij, route_k, node_i, node_j, node_k,
                         predecessor_ij, successor_ij, load_k - load_i - load_j, base_delta, cache);
         }
       }
@@ -199,7 +199,7 @@
     }
   }
 
-  std::vector<Node> SdSwapTwoOne::operator()(const Instance &instance,
+  std::vector<Node> SdSwapTwoOne::operator()(const Problem &problem,
                                                              SpecificSolution &solution,
                                                              RouteContext &context,
                                                              CacheMap &cache_map) const {
@@ -213,7 +213,7 @@
         }
         auto &cache = caches.Get(route_ij, route_k);
         if (!cache.TryReuse()) {
-          SdSwapTwoOneInner(instance, solution, context, route_ij, route_k, cache);
+          SdSwapTwoOneInner(problem, solution, context, route_ij, route_k, cache);
         } else {
           cache.move.route_ij = route_ij;
           cache.move.route_k = route_k;

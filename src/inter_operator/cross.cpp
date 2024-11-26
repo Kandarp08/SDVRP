@@ -56,16 +56,16 @@ using namespace std;
         int predecessor_load_y = context.PreLoad(left_y);
         int successor_load_y = context.Load(route_y) - predecessor_load_y;
         int base
-            = -instance.distance_matrix[solution.Customer(left_x)][solution.Customer(successor_x)]
-              - instance.distance_matrix[solution.Customer(left_y)][solution.Customer(successor_y)];
+            = -problem.distance_matrix[solution.Customer(left_x)][solution.Customer(successor_x)]
+              - problem.distance_matrix[solution.Customer(left_y)][solution.Customer(successor_y)];
         for (bool reversed : {false, true}) {
-          if (predecessor_load_x + successor_load_y <= instance.capacity
-              && successor_load_x + predecessor_load_y <= instance.capacity) {
+          if (predecessor_load_x + successor_load_y <= problem.capacity
+              && successor_load_x + predecessor_load_y <= problem.capacity) {
             int delta
                 = base
-                  + instance
+                  + problem
                         .distance_matrix[solution.Customer(left_x)][solution.Customer(successor_y)]
-                  + instance.distance_matrix[solution.Customer(successor_x)]
+                  + problem.distance_matrix[solution.Customer(successor_x)]
                                            [solution.Customer(predecessor_y)];
             if (cache.delta.Update(delta)) {
               cache.move = {reversed, route_x, route_y, left_x, left_y};

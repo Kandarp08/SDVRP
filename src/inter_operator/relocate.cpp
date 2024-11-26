@@ -21,18 +21,18 @@
     }
   }
 
-  void RelocateInner(const Instance &instance, const SpecificSolution &solution, const RouteContext &context,
+  void RelocateInner(const Problem &problem, const SpecificSolution &solution, const RouteContext &context,
                      Node route_x, Node route_y, BaseCache<RelocateMove> &cache,
                      StarCaches &star_caches) {
-    star_caches.Preprocess(instance, solution, context, route_y);
+    star_caches.Preprocess(problem, solution, context, route_y);
     Node node_x = context.Head(route_x);
     while (node_x) {
-      if (context.Load(route_y) + solution.Load(node_x) <= instance.capacity) {
+      if (context.Load(route_y) + solution.Load(node_x) <= problem.capacity) {
         auto insertion = star_caches.Get(route_y, solution.Customer(node_x)).FindBest();
         Node predecessor_x = solution.Predecessor(node_x);
         Node successor_x = solution.Successor(node_x);
         int delta = insertion->delta.value
-                    - CalcDelta(instance, solution, node_x, predecessor_x, successor_x);
+                    - CalcDelta(problem, solution, node_x, predecessor_x, successor_x);
         if (cache.delta.Update(delta)) {
           cache.move = {route_x, route_y, node_x, insertion->predecessor, insertion->successor};
         }
@@ -41,7 +41,7 @@
     }
   }
 
-  std::vector<Node> Relocate::operator()(const Instance &instance, SpecificSolution &solution,
+  std::vector<Node> Relocate::operator()(const Problem &problem, SpecificSolution &solution,
                                                          RouteContext &context,
                                                          CacheMap &cache_map) const {
     auto &caches = cache_map.Get<InterRouteCache<RelocateMove>>(solution, context);
@@ -55,7 +55,7 @@
         }
         auto &cache = caches.Get(route_x, route_y);
         if (!cache.TryReuse()) {
-          RelocateInner(instance, solution, context, route_x, route_y, cache, star_caches);
+          RelocateInner(problem, solution, context, route_x, route_y, cache, star_caches);
         } else {
           cache.move.route_x = route_x;
           cache.move.route_y = route_y;
