@@ -1,3 +1,6 @@
+#ifndef DELTA_H
+#define DELTA_H
+
 #include <random>
 
 template <class T> struct Delta
@@ -47,3 +50,5 @@ template <class T> struct Delta
         return false;
     }
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef BASE_CACHE_H
+#define BASE_CACHE_H
+
 #include <algorithm>
 #include <vector>
 #include "cache.h"
@@ -83,3 +86,5 @@ private:
   std::vector<Node> unused_indices_;
   Node max_index_{};
 };
+
+#endif

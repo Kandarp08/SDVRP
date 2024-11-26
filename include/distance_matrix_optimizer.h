@@ -1,3 +1,6 @@
+#ifndef DISTANCE_MATRIX_OPTIMIZER_H
+#define DISTANCE_MATRIX_OPTIMIZER_H
+
 #include "include/problem.h"
 #include "include/solution.h"
 
@@ -13,3 +16,5 @@ private:
     std::vector<std::vector<int>> original_;
     std::vector<std::vector<Node>> previous_node_indices_;
 };
+
+#endif

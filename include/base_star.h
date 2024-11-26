@@ -1,3 +1,6 @@
+#ifndef BASE_STAR_H
+#define BASE_STAR_H
+
 #include "inter_operator.h"
 #include <limits>
 #include "base_cache.h"
@@ -58,7 +61,7 @@ template <int num> struct BestInsertion {
 
 class StarCaches : public Cache {
 public:
-  void Reset(const SpecificSolution &solution, const RouteContext &context) override {
+  void Reset(const SpecificSolution &solution, const RouteContext &context) {
     caches_.resize(context.NumRoutes());
     for (Node route_index = 0;
           static_cast<size_t>(route_index) < std::min(routes_.size(), caches_.size());
@@ -117,7 +120,7 @@ public:
       successor = solution.Successor(successor);
     }
   }
-  void Save(const SpecificSolution &solution, const RouteContext &context) override {
+  void Save(const SpecificSolution &solution, const RouteContext &context) {
     routes_.resize(context.NumRoutes());
     for (Node route_index = 0; static_cast<size_t>(route_index) < routes_.size(); ++route_index) {
       auto &route = routes_[route_index];
@@ -142,3 +145,5 @@ inline int CalcDelta(const Problem &problem, const SpecificSolution &solution, N
           + problem.distance_matrix[solution.Customer(node_index)][solution.Customer(successor)]
           - problem.distance_matrix[solution.Customer(predecessor)][solution.Customer(successor)];
                       }
+
+#endif

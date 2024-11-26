@@ -1,3 +1,6 @@
+#ifndef ACCEPTANCE_RULE_H
+#define ACCEPTANCE_RULE_H
+
 #include <limits>
 #include <vector>
 
@@ -42,3 +45,5 @@ private:
     double temperature_;
     double decay_;
 };
+
+#endif

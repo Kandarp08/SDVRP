@@ -1,4 +1,4 @@
-#include "include/acceptance_rule.h"
+#include "../include/acceptance_rule.h"
 
 #include <cmath>
 

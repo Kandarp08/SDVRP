@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CACHE_H
+#define CACHE_H
 
 #include "problem.h"
 #include "solution.h"
@@ -79,3 +80,5 @@ public:
 private:
     unordered_map<type_index, unique_ptr<Cache>> caches_;
 };
+
+#endif
