@@ -62,11 +62,24 @@ Problem ReadProblemFromFile(const string &problem_path)
 }
 
 int main()
-{
+{   
 
-    string problem_path;
-    cin>>problem_path;
-    string output = "./solution.txt";
+    cout<<"Enter range of testcases(1 to 21). Enter as <start_index> <space> <end_index> "<<endl;
+    int l,r;
+    cin>>l>>r;
+
+    for(int i=max(l,0);i<=min(r,21);i++){
+    cout<<endl;
+    cout<<"Testcase "<<i<<" "<<endl<<endl;
+
+    string problem_path = "./data/SD";
+    problem_path+=to_string(i);
+    problem_path+=".txt";
+
+    string output = "./output/solution";
+    output+=to_string(i);
+    output+=".txt";
+
 
     auto problem = ReadProblemFromFile(problem_path);
     auto distance_matrix_optimizer = DistanceMatrixOptimizer(problem.distance_matrix);
@@ -128,6 +141,7 @@ int main()
     else
     {
         ofs << solution;
+    }
     }
     return 0;
 }
