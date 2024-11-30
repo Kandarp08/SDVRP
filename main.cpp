@@ -63,13 +63,16 @@ Problem ReadProblemFromFile(const string &problem_path)
 
 int main()
 {
-    string problem_path = "./data/SET-1/SD1.txt";
+
+    string problem_path;
+    cin>>problem_path;
     string output = "./solution.txt";
 
     auto problem = ReadProblemFromFile(problem_path);
     auto distance_matrix_optimizer = DistanceMatrixOptimizer(problem.distance_matrix);
     SpecificSolver solver;
     SpecificConfig config;
+    
 
     config.random_seed = 42;
     config.time_limit = 10;

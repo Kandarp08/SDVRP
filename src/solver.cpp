@@ -1,5 +1,8 @@
 #include "../include/solver.h"
 
+#include<bits/stdc++.h>
+using namespace std;
+
 #include <algorithm>
 #include <chrono>
 #include <limits>
@@ -116,7 +119,9 @@ void RandomizedVariableNeighborhoodDescent(const Problem &problem, const Specifi
 void Perturb(const Problem &problem, const SpecificConfig &config, SpecificSolution &solution,
                RouteContext &context) 
 {
+
     context.CalcRouteContext(solution);
+    // error in Ruin
     vector<Node> customers = config.ruin_method->Ruin(problem, solution, context);
     config.sorter.Sort(problem, customers);
 
@@ -172,6 +177,9 @@ SpecificSolution SpecificSolver::Solve(const SpecificConfig &config, const Probl
     auto start_time = std::chrono::high_resolution_clock::now();
     const int kMaxStagnation = std::min(5000, static_cast<int>(problem.num_customers)
                                                   * static_cast<int>(CalcFleetLowerBound(problem)));
+
+
+    
     
     while (ElapsedTime(start_time) < config.time_limit) 
     {
@@ -182,16 +190,28 @@ SpecificSolution SpecificSolver::Solve(const SpecificConfig &config, const Probl
         auto acceptance_rule = config.acceptance_rule();
         int num_stagnation = 0;
 
+    
+
+
         while (num_stagnation < kMaxStagnation && ElapsedTime(start_time) < config.time_limit) 
         {
             ++num_stagnation;
             context.CalcRouteContext(new_solution);
+
+    
+
         
             for (Node i = 0; i < context.NumRoutes(); ++i)
                 IntraRouteSearch(problem, config, i, new_solution, context);
+
+    
+
         
             RandomizedVariableNeighborhoodDescent(problem, config, new_solution, context,
                                                 cache_map);
+
+    
+                                        
 
             int new_objective = new_solution.CalcObjective(problem);
 
@@ -219,8 +239,12 @@ SpecificSolution SpecificSolver::Solve(const SpecificConfig &config, const Probl
             
             else
                 new_solution = solution;
-            
+
+            // error in perturb
             Perturb(problem, config, new_solution, context);
+
+
+    
         }
     }
     
