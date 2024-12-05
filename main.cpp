@@ -64,22 +64,23 @@ Problem ReadProblemFromFile(const string &problem_path)
 int main()
 {   
 
-    cout<<"Enter range of testcases(1 to 21). Enter as <start_index> <space> <end_index> "<<endl;
-    int l,r;
-    cin>>l>>r;
+    // cout << "Enter range of testcases (1 to 21). Enter as <start_index> <space> <end_index> " << endl;
+    int l, r;
+    cin >> l >> r;
 
-    for(int i=max(l,0);i<=min(r,21);i++){
-    cout<<endl;
-    cout<<"Testcase "<<i<<" "<<endl<<endl;
+    l = max(l, 1);  // Ensure the range starts from 1
+    r = min(r, 21); // Ensure the range does not exceed 21
 
-    string problem_path = "./data/SD";
-    problem_path+=to_string(i);
-    problem_path+=".txt";
+    for (int i = l; i <= r; i++) {
+        cout << endl;
+        cout << "Processing Testcase " << i << endl << endl;
 
-    string output = "./output/solution";
-    output+=to_string(i);
-    output+=".txt";
+        string problem_path = "./data/SD" + to_string(i) + ".txt";
+        string output = "./output/solution" + to_string(i) + ".txt";
 
+        // Add your logic to handle each test case here
+        cout << "Problem file: " << problem_path << endl;
+        cout << "Output file: " << output << endl;
 
     auto problem = ReadProblemFromFile(problem_path);
     auto distance_matrix_optimizer = DistanceMatrixOptimizer(problem.distance_matrix);
