@@ -24,7 +24,9 @@ To run this project, ensure the following tools are installed on your system:
 │   ├── intra_operator/        # Intra-operator implementations
 │   ├── inter_operator/        # Inter-operator implementations
 │   └── *.cpp                  # Other source files
+├── include/                   # Directory containing all the header files
 ├── data/                      # Input data files for test cases
+├── ref/                       # References used in this Project
 ├── output/                    # Directory for output files
 ├── main.cpp                   # Entry point for the program
 ├── Makefile                   # Build automation file
