@@ -4,6 +4,9 @@
 #include "../../include/base_star.h"
 #include "../../include/route_head_guard.h"
 
+  // Structure representing a Split Delivery Swap Star Move
+  // This structure captures the details of a potential route modification 
+  // involving swapping nodes between two different routes
   struct SdSwapStarMove {
     bool swapped;
     Node route_x, route_y;
@@ -11,6 +14,9 @@
     Node node_y, predecessor_y, successor_y;
     int split_load;
   };
+
+  // Executes the Split Delivery Swap Star Move by modifying the solution
+  // This function physically performs the node swapping between routes
 
   void DoSdSwapStar(SdSwapStarMove &move, SpecificSolution &solution, RouteContext &context) {
     Node predecessor_y = solution.Predecessor(move.node_y);
@@ -29,6 +35,8 @@
     }
   }
 
+  // Inner function to evaluate a potential Split Delivery Swap Star Move
+  // This function calculates the cost delta and finds the best insertion point
   void SdSwapStarInner(const Problem &problem, const SpecificSolution &solution,
                        [[maybe_unused]] const RouteContext &context, bool swapped, Node route_x,
                        Node route_y, Node node_x, Node node_y, int split_load,
@@ -61,6 +69,7 @@
     }
   }
 
+  // Overloaded inner function to iterate through nodes in two routes
   void SdSwapStarInner(const Problem &problem, const SpecificSolution &solution,
                        const RouteContext &context, Node route_x, Node route_y,
                        BaseCache<SdSwapStarMove> &cache, StarCaches &star_caches) {
@@ -85,6 +94,8 @@
     }
   }
 
+  // Main operator function implementing the Split Delivery Swap Star Move
+  // This function finds and applies the best route modification
   std::vector<Node> SdSwapStar::operator()(const Problem &problem,
                                                            SpecificSolution &solution,
                                                            RouteContext &context,
@@ -112,9 +123,11 @@
         }
       }
     }
+    // Apply the best move if it improves the solution
     if (best_delta.value < 0) {
       DoSdSwapStar(best_move, solution, context);
       return {best_move.route_x, best_move.route_y};
     }
+    // Return empty vector if no improvement found
     return {};
   }

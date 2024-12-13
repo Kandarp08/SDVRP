@@ -6,12 +6,14 @@
 #include "../../include/base_star.h"
 #include "../../include/route_head_guard.h"
 
+  // Struct to represent a SwapStar move between routes
   struct SwapStarMove {
-    Node route_x, route_y;
+    Node route_x, route_y;// Source and destination routes
     Node node_x, predecessor_x, successor_x;
     Node node_y, predecessor_y, successor_y;
   };
 
+  // Function to execute a SwapStar move between routes
   void DoSwapStar(SwapStarMove &move, SpecificSolution &solution, RouteContext &context) {
     Node predecessor_x = solution.Predecessor(move.node_x);
     Node successor_x = solution.Successor(move.node_x);
@@ -31,6 +33,7 @@
     }
   }
 
+  // Core function to explore SwapStar moves between routes
   void SwapStarInner(const Problem &problem, const SpecificSolution &solution, const RouteContext &context,
                      Node route_x, Node route_y, BaseCache<SwapStarMove> &cache,
                      StarCaches &star_caches) {
@@ -79,6 +82,7 @@
     }
   }
 
+  // Operator to perform SwapStar moves across routes
   std::vector<Node> SwapStar::operator()(const Problem &problem, SpecificSolution &solution,
                                                          RouteContext &context,
                                                          CacheMap &cache_map) const {
@@ -100,6 +104,7 @@
         }
       }
     }
+    // Apply best move if it improves the solution
     if (best_delta.value < 0) {
       DoSwapStar(best_move, solution, context);
       return {best_move.route_x, best_move.route_y};

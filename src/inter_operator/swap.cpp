@@ -2,13 +2,14 @@
 
 #include "../../include/base_cache.h"
 
+  // Struct to represent a swap move operation between routes
   template <int, int> struct SwapMove {
     Node route_x, route_y;
     int direction_x, direction_y;
     Node left_x, left_y;
     Node right_x, right_y;
   };
-
+  // Function to insert a segment into a route, with optional reversal
   void SegmentInsertion(SpecificSolution &solution, RouteContext &context, Node left, Node right,
                         Node predecessor, Node successor, Node route_index, int direction) {
     if (direction) {
@@ -22,6 +23,7 @@
     }
   }
 
+  // Template function to perform a swap move between routes
   template <int num_x, int num_y>
   void DoSwap(SwapMove<num_x, num_y> &move, SpecificSolution &solution, RouteContext &context) {
     if (move.direction_y == -1) {
@@ -45,6 +47,7 @@
     }
   }
 
+  // Function to update and evaluate a potential shift move between routes
   template <int num_x, int num_y>
   void UpdateShift(const Problem &problem, const SpecificSolution &solution, Node route_x, Node route_y,
                    Node left, Node right, Node predecessor, Node successor, Node base_x,
@@ -65,6 +68,7 @@
     }
   }
 
+  // Function to update and evaluate a potential swap move between routes
   template <int num_x, int num_y>
   void UpdateSwap(const Problem &problem, const SpecificSolution &solution, Node route_x, Node route_y,
                   Node left_x, Node right_x, Node left_y, Node right_y, int base_x,
@@ -95,6 +99,7 @@
     }
   }
 
+  // Core function to explore swap moves within and between routes
   template <int num_x, int num_y>
   void SwapInner(const Problem &problem, SpecificSolution &solution, RouteContext &context, Node route_x,
                  Node route_y, BaseCache<SwapMove<num_x, num_y>> &cache) {
@@ -156,6 +161,7 @@
     }
   }
 
+  // Operator overload to perform swap moves between routes
   template <int num_x, int num_y> std::vector<Node> Swap<num_x, num_y>::operator()(
       const Problem &problem, SpecificSolution &solution, RouteContext &context,
       CacheMap &cache_map) const {
@@ -187,6 +193,7 @@
     return {};
   }
 
+  // Explicit template instantiations for different segment swap configurations
   template class Swap<1, 0>;
   template class Swap<2, 0>;
   template class Swap<1, 1>;

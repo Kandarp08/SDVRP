@@ -3,13 +3,18 @@
 
 using namespace std;
 
-
+  // Structure representing a cross move between two routes
   struct CrossMove {
     bool reversed;
     Node route_x, route_y;
     Node left_x, left_y;
   };
 
+  // Performs the actual cross move between two routes
+  // Parameters:
+  // - move: The CrossMove containing details of the segment exchange
+  // - solution: Current solution being modified
+  // - context: Route context tracking route-specific information
   void DoCross(const CrossMove &move, SpecificSolution &solution, RouteContext &context) {
     Node right_x = move.left_x ? solution.Successor(move.left_x) : context.Head(move.route_x);
     Node right_y = move.left_y ? solution.Successor(move.left_y) : context.Head(move.route_y);
@@ -42,6 +47,14 @@ using namespace std;
     }
   }
 
+  // Inner function to calculate cross move possibilities between two routes
+  // Parameters:
+  // - problem: Problem instance with routing constraints
+  // - solution: Current solution
+  // - context: Route context
+  // - route_x: First route index
+  // - route_y: Second route index
+  // - cache: Cache to store the best move
   void CrossInner(const Problem& problem, const SpecificSolution &solution, const RouteContext &context,
                   Node route_x, Node route_y, BaseCache<CrossMove> &cache) {
     Node left_x = 0;
@@ -80,6 +93,13 @@ using namespace std;
     } while (left_x);
   }
 
+  // Operator implementing the cross move for inter-route optimization
+  // Parameters:
+  // - problem: Problem instance with routing constraints
+  // - solution: Current solution to be modified
+  // - context: Route context tracking route-specific information
+  // - cache_map: Cache management for move calculations
+  // Returns: Vector of modified route indices
   vector<Node> Cross::operator()(const Problem& problem, SpecificSolution &solution,
                                                       RouteContext &context,
                                                       CacheMap &cache_map) const {

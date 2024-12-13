@@ -2,11 +2,17 @@
 #include "../../include/base_star.h"
 #include "../../include/route_head_guard.h"
 
+  // Structure representing a relocate move between routes
   struct RelocateMove {
     Node route_x, route_y;
     Node node_x, predecessor_x, successor_x;
   };
 
+  // Performs the actual node relocation between routes
+  // Parameters:
+  // - move: The RelocateMove containing details of node relocation
+  // - solution: Current solution being modified
+  // - context: Route context tracking route-specific information
   void DoRelocate(RelocateMove &move, SpecificSolution &solution, RouteContext &context) {
     Node predecessor_x = solution.Predecessor(move.node_x);
     Node successor_x = solution.Successor(move.node_x);
@@ -20,7 +26,16 @@
       solution.Link(move.node_x, move.successor_x);
     }
   }
-
+  
+  // Inner function to calculate relocate move possibilities between two routes
+  // Parameters:
+  // - problem: Problem instance with routing constraints
+  // - solution: Current solution
+  // - context: Route context
+  // - route_x: Source route index
+  // - route_y: Destination route index
+  // - cache: Cache to store the best move
+  // - star_caches: Star-based caches for efficient insertion point finding
   void RelocateInner(const Problem &problem, const SpecificSolution &solution, const RouteContext &context,
                      Node route_x, Node route_y, BaseCache<RelocateMove> &cache,
                      StarCaches &star_caches) {
@@ -41,6 +56,13 @@
     }
   }
 
+  // Operator implementing the relocate move for inter-route optimization
+  // Parameters:
+  // - problem: Problem instance with routing constraints
+  // - solution: Current solution to be modified
+  // - context: Route context tracking route-specific information
+  // - cache_map: Cache management for move calculations
+  // Returns: Vector of modified route indices
   std::vector<Node> Relocate::operator()(const Problem &problem, SpecificSolution &solution,
                                                          RouteContext &context,
                                                          CacheMap &cache_map) const {
@@ -65,6 +87,7 @@
         }
       }
     }
+    // If an improvement is found, perform the relocate move
     if (best_delta.value < 0) {
       DoRelocate(best_move, solution, context);
       return {best_move.route_x, best_move.route_y};

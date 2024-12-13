@@ -10,6 +10,8 @@
     bool direction_ij, direction_ijk;
   };
 
+  // Applies the selected Swap Two-One move to modify the solution routes
+  // Handles node reallocation, load splitting, and route reconstruction
   void DoSdSwapTwoOne(const SdSwapTwoOneMove &move, SpecificSolution &solution, RouteContext &context) {
     Node predecessor_k = solution.Predecessor(move.node_k);
     Node successor_k = solution.Successor(move.node_k);
@@ -84,6 +86,8 @@
     }
   }
 
+  // Calculates the move delta for Type 0 moves (splitting from node_j)
+  // Explores different route configurations to find the most beneficial move
   void SdSwapTwoOne0(const Problem &problem, const SpecificSolution &solution,
                      [[maybe_unused]] const RouteContext &context, Node route_ij, Node route_k,
                      Node node_i, Node node_j, Node node_k, Node predecessor_ij, Node successor_ij,
@@ -121,6 +125,8 @@
     }
   }
 
+  // Similar to SdSwapTwoOne0, but for Type 1 moves (splitting from node_k)
+  // More complex exploration of route configurations
   void SdSwapTwoOne1(const Problem &problem, const SpecificSolution &solution,
                      [[maybe_unused]] const RouteContext &context, Node route_ij, Node route_k,
                      Node node_i, Node node_j, Node node_k, Node predecessor_ij, Node successor_ij,
@@ -161,6 +167,7 @@
     }
   }
 
+  // Core search method to explore Swap Two-One moves between routes
   void SdSwapTwoOneInner(const Problem &problem, const SpecificSolution &solution,
                          const RouteContext &context, Node route_ij, Node route_k,
                          BaseCache<SdSwapTwoOneMove> &cache) {
@@ -199,6 +206,7 @@
     }
   }
 
+  // Main operator to find and apply the best Swap Two-One move
   std::vector<Node> SdSwapTwoOne::operator()(const Problem &problem,
                                                              SpecificSolution &solution,
                                                              RouteContext &context,
@@ -223,9 +231,10 @@
         }
       }
     }
+    // Apply the best move if it improves the solution
     if (best_delta.value < 0) {
       DoSdSwapTwoOne(best_move, solution, context);
       return {best_move.route_ij, best_move.route_k};
     }
-    return {};
+    return {};// Return empty vector if no improvement found
   }

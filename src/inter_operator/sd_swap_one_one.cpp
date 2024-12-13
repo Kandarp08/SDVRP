@@ -3,6 +3,9 @@
 #include "../../include/base_star.h"
 #include "../../include/route_head_guard.h"
 
+// Structure representing a Split Delivery Swap One-One Move
+// This structure captures the details of a potential route modification 
+// involving swapping a single node between two different routes
 struct SdSwapOneOneMove {
   bool swapped;
   Node route_x, route_y;
@@ -11,6 +14,8 @@ struct SdSwapOneOneMove {
   int split_load;
 };
 
+// Executes the Split Delivery Swap One-One Move by modifying the solution
+// This function physically performs the node swapping between routes
 void DoSdSwapOneOne(const SdSwapOneOneMove &move, SpecificSolution &solution, RouteContext &context) {
   Node predecessor_y = solution.Predecessor(move.node_y);
   Node successor_y = solution.Successor(move.node_y);
@@ -28,6 +33,8 @@ void DoSdSwapOneOne(const SdSwapOneOneMove &move, SpecificSolution &solution, Ro
   }
 }
 
+// Inner function to evaluate a potential Split Delivery Swap One-One Move
+// This function calculates the cost delta and finds the best insertion point
 void SdSwapOneOneInner(const Problem &problem, const SpecificSolution &solution,
                         [[maybe_unused]] const RouteContext &context, bool swapped, Node route_x,
                         Node route_y, Node node_x, Node node_y, int split_load,
@@ -59,6 +66,7 @@ void SdSwapOneOneInner(const Problem &problem, const SpecificSolution &solution,
   }
 }
 
+// Overloaded inner function to iterate through nodes in two routes
 void SdSwapOneOneInner(const Problem &problem, const SpecificSolution &solution,
                         const RouteContext &context, Node route_x, Node route_y,
                         BaseCache<SdSwapOneOneMove> &cache) {
@@ -77,6 +85,8 @@ void SdSwapOneOneInner(const Problem &problem, const SpecificSolution &solution,
   }
 }
 
+// Main operator function implementing the Split Delivery Swap One-One Move
+// This function finds and applies the best route modification
 std::vector<Node> SdSwapOneOne::operator()(const Problem &problem,
                                                             SpecificSolution &solution,
                                                             RouteContext &context,
@@ -103,9 +113,12 @@ std::vector<Node> SdSwapOneOne::operator()(const Problem &problem,
       }
     }
   }
+
+  // Apply the best move if it improves the solution
   if (best_delta.value < 0) {
     DoSdSwapOneOne(best_move, solution, context);
     return {best_move.route_x, best_move.route_y};
   }
+  // Return empty vector if no improvement found
   return {};
 }
