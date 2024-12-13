@@ -7,14 +7,17 @@
 #include "solution.h"
 #include "route_context.h"
 
+// Base class for Ruin methods
 class RuinMethod
 {
 public:
 
+    // Ruin strategy to perturb a random number of customers.
     virtual vector<Node> Ruin(const Problem &problem, SpecificSolution &solution,
                                    RouteContext &context) = 0;
 };
 
+// Random ruin class
 class RandomRuin : public RuinMethod
 {
 public:
@@ -29,6 +32,7 @@ private:
     vector<int> num_perturb_customers_;
 };
 
+// SISRs ruin class
 class SisrsRuin : public RuinMethod
 {
 public:
@@ -41,12 +45,12 @@ public:
 
 private:
 
-    static Node GetRouteHead(SpecificSolution &solution, Node node_index, int &position);
-    static void GetRoute(const SpecificSolution &solution, Node head, vector<Node> &route);
-    int average_customers_;
-    int max_length_;
-    double split_rate_;
-    double preserved_probability_;
+    static Node GetRouteHead(SpecificSolution &solution, Node node_index, int &position); // Get head of a route
+    static void GetRoute(const SpecificSolution &solution, Node head, vector<Node> &route); // Get the complete route, starting from the head
+    int average_customers_; // Average number of removed customers
+    int max_length_; // Maximum cardinality of removed strings
+    double split_rate_; // Probability of executing the split string
+    double preserved_probability_; // Probability of preserving a node
 };
 
 #endif

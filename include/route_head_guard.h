@@ -4,6 +4,7 @@
 #include "solution.h"
 #include "route_context.h"
 
+// Makes sure that the route starts and ends at the depot (Node 0)
 struct RouteHeadGuard {
     SpecificSolution &solution;
     RouteContext &context;

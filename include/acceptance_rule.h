@@ -4,6 +4,7 @@
 #include <limits>
 #include <vector>
 
+// A general template to add any other acceptance rule
 class AcceptanceRule
 {
 public:

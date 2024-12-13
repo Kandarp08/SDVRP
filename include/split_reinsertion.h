@@ -5,6 +5,7 @@
 #include "solution.h"
 #include "route_context.h"
 
+// Perform split reinsertion to reallocate customer demand across routes.
 void SplitReinsertion(const Problem& problem, Node customer, int demand, double blinkRate,
                         SpecificSolution &solution, RouteContext &context);
 

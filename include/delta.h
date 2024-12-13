@@ -3,6 +3,8 @@
 
 #include <random>
 
+// To keep track of the best solution found so far
+// Returns true if value was updated, false otherwise
 template <class T> struct Delta
 {
     T value;
@@ -14,6 +16,7 @@ template <class T> struct Delta
 
     bool Update(T new_value) 
     {
+        // New value better than previous value
         if (new_value < value) 
         {
             value = new_value;
@@ -22,6 +25,7 @@ template <class T> struct Delta
             return true;
         } 
         
+        // Return true/false randomly
         else if (new_value == value && counter != -1)
         {
             ++counter;
@@ -33,6 +37,7 @@ template <class T> struct Delta
 
     bool Update(const Delta<T> &delta) 
     {
+        // Return true
         if (delta.value < value) 
         {
             value = delta.value;
@@ -41,6 +46,7 @@ template <class T> struct Delta
             return true;
         }
 
+        // Return true/false randomly
         else if (delta.value == value && counter != -1) 
         {
             counter += delta.counter;

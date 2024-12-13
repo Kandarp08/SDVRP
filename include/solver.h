@@ -6,6 +6,7 @@
 #include "config.h"
 #include "solution.h"
 
+// Main function for solving the problem
 
 template <typename SolutionType, typename ConfigType, typename ProblemType> class Solver {
     public:
@@ -16,11 +17,5 @@ class SpecificSolver : public Solver<SpecificSolution, SpecificConfig, Problem> 
     public:
         SpecificSolution Solve( const SpecificConfig &config,const Problem &problem) override;
 };
-
-
-
-///  Main function for solving the problem.
-/// problem The problem instance.
-/// return The solution to the problem.
 
 #endif

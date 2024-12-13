@@ -6,6 +6,7 @@ using namespace std;
 
 using Node = short;
 
+// To represent a problem instance
 struct Problem{
   Node num_customers;                   // The number of customers, including the depot.
   int capacity;                        // The capacity of the vehicles.

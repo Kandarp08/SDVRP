@@ -4,6 +4,7 @@
 #include "solution.h"
 #include "problem.h"
 
+// Constructs an initial feasible solution
 SpecificSolution Construct(const Problem& problem);
 
 Node CalcFleetLowerBound(const Problem &problem);

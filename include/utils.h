@@ -30,6 +30,7 @@ template <typename T> struct InsertionWithCost
     }
 };
 
+// Calculate the best insertion
 template <class T> auto CalcBestInsertion(const SpecificSolution &solution, const T &func,
                         const RouteContext &context, Node route_index, Node customer) 
 {

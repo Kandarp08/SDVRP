@@ -6,6 +6,7 @@
 
 #include "route_context.h"
 
-  void Repair(const Problem& problem, Node route_index, SpecificSolution &solution, RouteContext &context);
+// Repairs a route by merging duplicate customers and optimizing node placements.
+void Repair(const Problem& problem, Node route_index, SpecificSolution &solution, RouteContext &context);
 
 #endif
