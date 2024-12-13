@@ -216,14 +216,14 @@ template <class Func> void InsertCandidates(const Problem &problem, const Func &
 SpecificSolution Construct(const Problem& problem)
 {
     CandidateList candidate_list; // To store the split demands of different customers
-    Node num_fleets = CalcFleetLowerBound(problem); // Calculate a lower bound for the number of fleets
+    Node num_fleets = CalcFleetLowerBound(problem); // Calculate a lower bound for the number of vehicles
 
     // Iterate through all customers
     for (Node i = 1; i < problem.num_customers; ++i) 
     {
         int demand = problem.demands[i]; // Demand of the ith customer
       
-        // Split the demand between different fleets
+        // Split the demand between different vehicles
         while (demand > 0) 
         {
             int split_demand = min(demand, problem.capacity);
