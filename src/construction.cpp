@@ -7,7 +7,7 @@
 
 using CandidateList = vector<pair<int, int>>;
 
-
+// Calculate lower bound on the number of fleets required
 Node CalcFleetLowerBound(const Problem &problem) 
 {
     int sum_demands = 0;
@@ -18,6 +18,7 @@ Node CalcFleetLowerBound(const Problem &problem)
     return (sum_demands + problem.capacity - 1) / problem.capacity;
 }
 
+// Add a new route. This is a helper function to call the AddRoute method of class RouteContext
 int AddRoute(CandidateList &candidateList, SpecificSolution &solution,
                RouteContext &context) 
 {
@@ -35,40 +36,50 @@ int AddRoute(CandidateList &candidateList, SpecificSolution &solution,
     return position;
 }
 
+// Implementation of Sequential insertion, as given in [5]
 template <class Func> void SequentialInsertion(const Problem& problem, const Func &func, 
                          CandidateList& candidateList, SpecificSolution& solution, RouteContext& context)
 {
     InsertionWithCost<float> best_insertion{};
-    vector<bool> is_full(context.NumRoutes(), false);
+    vector<bool> is_full(context.NumRoutes(), false); // To know whether a route is full or not
     
+    // Iterate through all candidates
     while (!candidateList.empty()) 
     {
         bool inserted = false;
+
+        // Iterate through all routes
         for (Node route_index = 0; route_index < context.NumRoutes(); ++route_index) 
         {
+            // If the route is already full
             if (is_full[route_index])
                 continue;
 
-            int candidate_position = -1;
+            int candidate_position = -1; // Best candidate that can be inserted
             best_insertion.cost = Delta(std::numeric_limits<float>::max(), -1);
        
+            // Iterate through all the candidates
             for (int i = 0; i < candidateList.size(); ++i) 
             {
                 auto [customer, demand] = candidateList[i];
           
+                // If the load + demand exceeds vehicle capacity
                 if (context.Load(route_index) + demand > problem.capacity)
                     continue;
 
                 auto insertion = CalcBestInsertion(solution, func, context, route_index, customer);
                 
+                // If the current candidate gives a better insertion
                 if (best_insertion.Update(insertion))
                     candidate_position = i;
             
             }
-        
+
+            // No candidate can be added into the route. Set the route to be full in this case
             if (candidate_position == -1)
                 is_full[route_index] = true;
-            
+
+            // Candidate can be added in some route
             else 
             {
                 auto [customer, demand] = candidateList[candidate_position];
@@ -77,11 +88,13 @@ template <class Func> void SequentialInsertion(const Problem& problem, const Fun
                 candidateList.pop_back();
 
                 Node node_index = solution.Insert(customer, demand, best_insertion.predecessor,
-                                                    best_insertion.successor);
+                                                    best_insertion.successor); // Insert node_index into the solution
+
+                // Set the node as head of the route
                 if (best_insertion.predecessor == 0)
                     context.SetHead(route_index, node_index);
         
-                context.AddLoad(route_index, demand);
+                context.AddLoad(route_index, demand); // Add more load along the route
                 inserted = true;
             }
         }
@@ -94,11 +107,13 @@ template <class Func> void SequentialInsertion(const Problem& problem, const Fun
     }
 }
 
+// Implementation of Parallel insertion, as given in [5]
 template <class Func> void ParallelInsertion(const Problem& problem, const Func &func,
                        CandidateList& candidateList, SpecificSolution& solution, RouteContext& context)
 {
-    vector<vector<InsertionWithCost<float>>> best_insertions(candidateList.size());
+    vector<vector<InsertionWithCost<float>>> best_insertions(candidateList.size()); // Keep track of the best insertions
     
+    // Initialization
     for (int i = 0; i < candidateList.size(); ++i) 
     {
         for (Node j = 0; j < context.NumRoutes(); ++j) 
@@ -110,6 +125,7 @@ template <class Func> void ParallelInsertion(const Problem& problem, const Func 
     vector<bool> updated(context.NumRoutes(), false);
     InsertionWithCost<float> best_insertion{};
     
+    // Iterate through all candidates
     while (!candidateList.empty()) 
     {
         int candidate_position = -1;
@@ -122,6 +138,7 @@ template <class Func> void ParallelInsertion(const Problem& problem, const Func 
                 Node route_index = best_insertions[i][j].route_index;
                 auto [customer, demand] = candidateList[i];
 
+                // If the (load of the route) + demand exceeds the capacity of vehicle
                 if (context.Load(route_index) + demand > problem.capacity) 
                 {
                     best_insertions[i][j] = best_insertions[i].back();
@@ -134,15 +151,17 @@ template <class Func> void ParallelInsertion(const Problem& problem, const Func 
                     if (updated[route_index]) 
                         best_insertions[i][j] = CalcBestInsertion(solution, func, context, route_index, customer);
             
+                    // If the current candidate is a better insertion, then update candidate_position
                     if (best_insertion.Update(best_insertions[i][j])) 
                         candidate_position = i;
                 }
             }
         }
 
+        // No candidate added
         if (candidate_position == -1) 
         {
-            int position = AddRoute(candidateList, solution, context);
+            int position = AddRoute(candidateList, solution, context); // Add a new route for the candidate
             best_insertions[position] = std::move(best_insertions.back());
             best_insertions.pop_back();
 
@@ -157,6 +176,7 @@ template <class Func> void ParallelInsertion(const Problem& problem, const Func 
         
         else 
         {
+            // Remove candidate at candidate_position from the list
             auto [customer, demand] = candidateList[candidate_position];
             candidateList[candidate_position] = candidateList.back();
             candidateList.pop_back();
@@ -165,18 +185,20 @@ template <class Func> void ParallelInsertion(const Problem& problem, const Func 
             best_insertions.pop_back();
 
             Node node_index = solution.Insert(customer, demand, best_insertion.predecessor,
-                                            best_insertion.successor);
+                                            best_insertion.successor); // Insert the node_index into the solution
             Node route_index = best_insertion.route_index;
             
+            // Set the node as head of the route
             if (best_insertion.predecessor == 0)
                 context.SetHead(route_index, node_index);
         
-            context.AddLoad(route_index, demand);
+            context.AddLoad(route_index, demand); // Add the demand to the route
             updated[route_index] = true;
         }
     }
 }
 
+// Insert candidates into different routes. The insertion strategy is randomly selected
 template <class Func> void InsertCandidates(const Problem &problem, const Func &func,
                         CandidateList &candidate_list, SpecificSolution &solution, 
                         RouteContext &context) 
@@ -184,21 +206,24 @@ template <class Func> void InsertCandidates(const Problem &problem, const Func &
     int strategy = rand() % 2;
 
     if (strategy == 0)
-        SequentialInsertion(problem, func, candidate_list, solution, context);
+        SequentialInsertion(problem, func, candidate_list, solution, context); // Perform sequential insertion
     
     else
-        ParallelInsertion(problem, func, candidate_list, solution, context);
+        ParallelInsertion(problem, func, candidate_list, solution, context); // Perform parallel insertion
 }
 
+// Construct an inital solution, as per reference [5]
 SpecificSolution Construct(const Problem& problem)
 {
-    CandidateList candidate_list;
-    Node num_fleets = CalcFleetLowerBound(problem);
+    CandidateList candidate_list; // To store the split demands of different customers
+    Node num_fleets = CalcFleetLowerBound(problem); // Calculate a lower bound for the number of fleets
 
+    // Iterate through all customers
     for (Node i = 1; i < problem.num_customers; ++i) 
     {
-        int demand = problem.demands[i];
+        int demand = problem.demands[i]; // Demand of the ith customer
       
+        // Split the demand between different fleets
         while (demand > 0) 
         {
             int split_demand = min(demand, problem.capacity);
@@ -207,18 +232,21 @@ SpecificSolution Construct(const Problem& problem)
         }
     }
 
-    SpecificSolution solution;
-    RouteContext context;
+    SpecificSolution solution; // Solution to be returned
+    RouteContext context; // Details about the routes decided
 
+    // Add some initial routes
     for (Node i = 0; i < num_fleets && !candidate_list.empty(); ++i)
       AddRoute(candidate_list, solution, context);
     
-    int criterion = rand() % 2;
+    int criterion = rand() % 2; // Randomly decide the insertion criterion
     
+    // MCFIC criteria
     if (criterion == 0) 
     {
-        float gamma = static_cast<float>(rand() % 35) * 0.05f;
+        float gamma = static_cast<float>(rand() % 35) * 0.05f; // Randomly select gamma
       
+        // Cost function of MCFIC
         auto func = [&](Node predecessor, Node successor, Node customer) {
             Node pre_customer = solution.Customer(predecessor);
             Node suc_customer = solution.Customer(successor);
@@ -229,11 +257,13 @@ SpecificSolution Construct(const Problem& problem)
                 - 2 * gamma * problem.distance_matrix[0][customer];
         };
       
-        InsertCandidates(problem, func, candidate_list, solution, context);
+        InsertCandidates(problem, func, candidate_list, solution, context); // Insert candidates
     } 
     
+    // NFIC criteria
     else 
     {
+        // Cost function of NFIC
         auto func = [&](Node predecessor, [[maybe_unused]] Node successor, Node customer) {
             Node pre_customer = solution.Customer(predecessor);
         
@@ -244,7 +274,8 @@ SpecificSolution Construct(const Problem& problem)
                 return static_cast<float>(problem.distance_matrix[pre_customer][customer]);  
         };
       
-        InsertCandidates(problem, func, candidate_list, solution, context);
+        InsertCandidates(problem, func, candidate_list, solution, context); // Insert candidates
     }
-    return solution;
+
+    return solution; // Return the obtained solution
 }
