@@ -1,6 +1,0 @@
-SDxx instances: The set of 21 instances whose names begin with SD are due to:
-S. Chen, B. Golden, and E. Wasil, “The Split Delivery Vehicle Routing Problem: Applications, Algorithms,
-Test Problems, and Computational Results,” Networks 49 (2007), 318–329.
-The instances are named SD1 – SD21. Their size varies from 8 to 288 customers. The vehicle capacity is
-100 units. The customer demand is either 60 units or 90 units. In all instances of this set the customers
-are located in concentric circles around the depot.
