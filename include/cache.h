@@ -13,20 +13,33 @@
 
 using namespace std;
 
+// Base class for all cache types
 class Cache
 {
 public:
     virtual ~Cache() = default;
+
+    // Reset the cache
     virtual void Reset(const SpecificSolution &solution, const RouteContext &context) = 0;
+
+    // Add a route
     virtual void AddRoute(Node route_index) = 0;
+
+    // Remove a route
     virtual void RemoveRoute(Node route_index) = 0;
+
+    // Move a route
     virtual void MoveRoute(Node dest_route_index, Node src_route_index) = 0;
+
+    // Save the cache state
     virtual void Save(const SpecificSolution &solution, const RouteContext &context) = 0;
 };
 
+// Handles multiple caches of different types
 class CacheMap : public Cache
 {
 public:
+    // Get or create a specific cache
     template <class T>
     T &Get(const SpecificSolution &solution, const RouteContext &context)
     {
@@ -41,6 +54,8 @@ public:
         }
         return *static_cast<T *>(it->second.get());
     }
+
+    // Reset all caches
     void Reset(const SpecificSolution &solution, const RouteContext &context) override
     {
         for (auto &[_, cache] : caches_)
@@ -48,6 +63,8 @@ public:
             cache->Reset(solution, context);
         }
     }
+
+    // Add a route to all caches
     void AddRoute(Node route_index) override
     {
         for (auto &[_, cache] : caches_)
@@ -55,6 +72,8 @@ public:
             cache->AddRoute(route_index);
         }
     }
+
+    // Remove a route from all caches
     void RemoveRoute(Node route_index) override
     {
         for (auto &[_, cache] : caches_)
@@ -62,6 +81,8 @@ public:
             cache->RemoveRoute(route_index);
         }
     }
+
+    // Move a route in all caches
     void MoveRoute(Node dest_route_index, Node src_route_index) override
     {
         for (auto &[_, cache] : caches_)
@@ -69,6 +90,8 @@ public:
             cache->MoveRoute(dest_route_index, src_route_index);
         }
     }
+
+    // Save all caches
     void Save(const SpecificSolution &solution, const RouteContext &context) override
     {
         for (auto &[_, cache] : caches_)
@@ -78,7 +101,7 @@ public:
     }
 
 private:
-    unordered_map<type_index, unique_ptr<Cache>> caches_;
+    unordered_map<type_index, unique_ptr<Cache>> caches_; // Stores caches by type
 };
 
 #endif
